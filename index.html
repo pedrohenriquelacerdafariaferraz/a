@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo: Evitar Obstáculos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            background-color: #e5e5e5;
+            display: block;
+            margin: 0 auto;
+            border: 2px solid #333;
+        }
+        #gameOver {
+            text-align: center;
+            font-size: 24px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="gameCanvas" width="400" height="600"></canvas>
+<div id="gameOver"></div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Configurações do jogo
+    let player = { x: 200, y: 550, width: 50, height: 50, color: 'blue' };
+    let obstacles = [];
+    let obstacleSpeed = 2;
+    let gameIsOver = false;
+    let score = 0;
+
+    // Função para desenhar o jogador
+    function drawPlayer() {
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+    }
+
+    // Função para desenhar obstáculos
+    function drawObstacles() {
+        obstacles.forEach(obstacle => {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        });
+    }
+
+    // Função para atualizar a posição dos obstáculos
+    function updateObstacles() {
+        obstacles.forEach(obstacle => {
+            obstacle.y += obstacleSpeed;
+        });
+
+        // Remove obstáculos que saem da tela
+        obstacles = obstacles.filter(obstacle => obstacle.y < canvas.height);
+    }
+
+    // Função para gerar novos obstáculos
+    function generateObstacle() {
+        const width = Math.random() * (100 - 50) + 50; // largura aleatória
+        const x = Math.random() * (canvas.width - width);
+        obstacles.push({ x: x, y: -50, width: width, height: 20 });
+    }
+
+    // Função para verificar colisões
+    function checkCollision() {
+        obstacles.forEach(obstacle => {
+            if (player.x < obstacle.x + obstacle.width &&
+                player.x + player.width > obstacle.x &&
+                player.y < obstacle.y + obstacle.height &&
+                player.y + player.height > obstacle.y) {
+                gameIsOver = true;
+            }
+        });
+    }
+
+    // Função para mover o jogador
+    function movePlayer(e) {
+        if (e.key === 'ArrowLeft' && player.x > 0) {
+            player.x -= 20;
+        } else if (e.key === 'ArrowRight' && player.x + player.width < canvas.width) {
+            player.x += 20;
+        }
+    }
+
+    // Função principal do jogo
+    function gameLoop() {
+        if (gameIsOver) {
+            document.getElementById('gameOver').innerText = `Fim de Jogo! Pontuação: ${score}`;
+            return;
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpa a tela
+
+        drawPlayer();
+        drawObstacles();
+        updateObstacles();
+        checkCollision();
+
+        // Aumenta a pontuação e dificuldade
+        score++;
+        if (score % 100 === 0) {
+            obstacleSpeed += 0.5;
+        }
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    // Gera obstáculos a cada intervalo de tempo
+    setInterval(generateObstacle, 1500);
+
+    // Movimenta o jogador ao pressionar as setas
+    document.addEventListener('keydown', movePlayer);
+
+    // Inicia o loop do jogo
+    gameLoop();
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Informações e dicas sobre trânsito, segurança e leis de trânsito.">
+    <title>Portal de Trânsito</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #004080;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: #333;
+            overflow: hidden;
+        }
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            background-color: #575757;
+        }
+        .container {
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #004080;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="color: black;">Portal de Trânsito</h1>
+        <p>Informações sobre segurança no trânsito, leis e dicas para motoristas e pedestres.</p>
+    </header>
+
+    <nav>
+        <a href="#seguranca">Segurança</a>
+        <a href="#leis">Leis de Trânsito</a>
+        <a href="#dicas">Dicas</a>
+        <a href="#contato">Contato</a>
+    </nav>
+
+    <div class="container">
+        <section id="seguranca">
+            <h2>Segurança no Trânsito</h2>
+            <p>A segurança no trânsito é essencial para a proteção de motoristas, passageiros e pedestres. Respeitar as leis, evitar distrações e dirigir com responsabilidade são atitudes que salvam vidas.</p>
+        </section>
+
+        <section id="leis">
+            <h2>Leis de Trânsito</h2>
+            <p>Conhecer e seguir as leis de trânsito é fundamental para evitar acidentes. No Brasil, o Código de Trânsito Brasileiro (CTB) estabelece as normas que devem ser respeitadas por todos.</p>
+        </section>
+
+        <section id="dicas">
+            <h2>Dicas para Motoristas e Pedestres</h2>
+            <p>Motoristas devem sempre usar o cinto de segurança, respeitar os limites de velocidade e evitar o uso de celular ao volante. Pedestres, por sua vez, devem sempre atravessar nas faixas e prestar atenção ao trânsito.</p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Portal de Trânsito. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
